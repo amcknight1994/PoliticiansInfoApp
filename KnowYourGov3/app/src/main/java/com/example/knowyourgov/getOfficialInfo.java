@@ -87,7 +87,7 @@ public class getOfficialInfo extends AsyncTask<String, Void, String> {
             JSONObject x = new JSONObject(s);
             normalized = x.getJSONObject("normalizedInput");
             JSONArray offices = x.getJSONArray("offices");
-            JSONArray officials = x.getJSONArray("officials"); //this currently doesn't get data, perhaps is an object?
+            JSONArray officials = x.getJSONArray("officials");
 
             for (int i = 0; i < offices.length(); i++){
                 JSONObject p = offices.getJSONObject(i);
@@ -100,14 +100,17 @@ public class getOfficialInfo extends AsyncTask<String, Void, String> {
                          ArrayList<String> address = new ArrayList<>();
                          JSONObject thisAddress = thisOfficial.getJSONArray("address").getJSONObject(0);
                          String line1 = thisAddress.getString("line1");
-                         String line2 = thisAddress.getString("line2");
-                         String line3 = thisAddress.getString("line3");
                          address.add(line1);
-                         address.add(line2);
-                         address.add(line3);
-                         address.add(thisAddress.getString("city"));
-                         address.add(thisAddress.getString("state"));
-                         address.add(thisAddress.getString("zip"));
+                         if (thisAddress.has("line2")){ String line2 = thisAddress.getString("line2");
+                         address.add(line2);}
+                         if (thisAddress.has ("line3")){String line3 = thisAddress.getString("line3");
+                         address.add(line3);}
+                         if (thisAddress.has("city")) {
+                             address.add(thisAddress.getString("city"));}
+                         if (thisAddress.has("state")) {
+                             address.add(thisAddress.getString("state"));}
+                         if (thisAddress.has("zip")) {
+                             address.add(thisAddress.getString("zip"));}
                          toAdd.setAddress(address);
                     }
                     if (thisOfficial.has("emails")){

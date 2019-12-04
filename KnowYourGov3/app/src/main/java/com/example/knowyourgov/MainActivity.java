@@ -32,17 +32,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,42 +68,47 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.main_activity);
-        if (!doNetCheck()) setContentView(R.layout.noconnection);
-        else {
-            setTitle("Know Your Government");
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-            recyclerView = findViewById(R.id.recyclerView);
-            mainActivity = this;
-            OfficialAdapter = new official_adapter(Officials, this);
-            recyclerView.setAdapter(OfficialAdapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        setTitle("Know Your Government");
+        locationManager = (LocationManager)  getSystemService(Context.LOCATION_SERVICE);
 
-            criteria = new Criteria();
-            criteria.setPowerRequirement(Criteria.POWER_HIGH);
-            criteria.setAccuracy(Criteria.ACCURACY_FINE);
-            criteria.setAltitudeRequired(false);
-            criteria.setBearingRequired(false);
-            criteria.setSpeedRequired(false);
+        if (!doNetCheck()){ setContentView(R.layout.noconnection);}
 
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(
-                        this,
-                        new String[]{
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                        },
-                        MY_LOCATION_REQUEST_CODE_ID);
-            }
-            setLocation();
-            getZip(this);
 
-            header = findViewById(R.id.header);
-            header.setText(city + ", " + state + " " + zip);
-            AsyncTask<String, Void, String> a = new getOfficialInfo(this).execute(zip);
+        criteria = new Criteria();
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setSpeedRequired(false);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    },
+                    MY_LOCATION_REQUEST_CODE_ID);
         }
+        else {
+            setLocation();
+        }
+        setLocation();
+        recyclerView = findViewById(R.id.recyclerView);
+        mainActivity = this;
+        OfficialAdapter = new official_adapter(Officials, this);
+        recyclerView.setAdapter(OfficialAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        getZip(this);
+
+        header = findViewById(R.id.header);
+        header.setText(city + ", " + state + " " + zip);
+        AsyncTask<String, Void, String> a = new getOfficialInfo(this).execute(zip);
+
+
     }
 
     public void setHeader(){
@@ -173,56 +173,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void doRead(View v) {
-        Officials.clear();
-        try {
-            InputStream inputStream = openFileInput("Officials.txt");
-
-            if ( inputStream != null ) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
-
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
-                    stringBuilder.append(receiveString);
-                }
-
-                inputStream.close();
-
-                String jsonText = stringBuilder.toString();
-
-                try {
-                    JSONArray jsonArray = new JSONArray(jsonText);
-                    Log.d(TAG, "doRead: " + jsonArray.length());
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        String name = jsonObject.getString("name");
-                        String title = jsonObject.getString("title");
-                        String party = jsonObject.getString("party");
-                        Official n = new Official(name, title, party);
-                        Officials.add(n);
-                    }
-
-                    Log.d(TAG, "doRead: " + Officials);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }
-        catch (FileNotFoundException e) {
-            Log.d(TAG, "doRead: File not found: \" + e.toString()");
-        } catch (IOException e) {
-            Log.d(TAG, "doRead: Can not read file: " + e.toString());
-        }
-    }
-    protected void onSaveInstanceState(Bundle outState){
-        outState.putSerializable("Officials", Officials);
-        super.onSaveInstanceState(outState);
-    }
 
     protected void onRestoreInstanceState(Bundle savedInstance){
           super.onRestoreInstanceState(savedInstance);
@@ -325,19 +275,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
     @SuppressLint("MissingPermission")
     private void setLocation() {
 
         String bestProvider = locationManager.getBestProvider(criteria, true);
         Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
-
         if (currentLocation != null) {
-                 lat = currentLocation.getLatitude();
-                 longitude = currentLocation.getLongitude();
-
+             lat = currentLocation.getLatitude();
+             longitude = currentLocation.getLongitude();
+             Toast.makeText(this, String.valueOf(lat), Toast.LENGTH_SHORT).show();
+             getZip(this);
         }
     }
-
 
 
     public void getZip(MainActivity v) {
@@ -345,11 +295,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             List<Address> addresses;
 
-
             addresses = geocoder.getFromLocation(lat, longitude, 10);
 
             if (!addresses.isEmpty()) {
                 zip = addresses.get(0).getPostalCode();
+                Toast.makeText(this, zip, Toast.LENGTH_SHORT).show();
                 city = addresses.get(0).getLocality();
                 state = addresses.get(0).getAdminArea();
             }
@@ -364,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         zip     = _zip;
         city    = _city;
         state   = _state;
-        header.setText(city +", " + state + " " + zip);
+        setHeader();
     }
 
 }

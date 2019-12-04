@@ -54,11 +54,21 @@ public class OfficialActivity extends AppCompatActivity {
             website.setText(thisOfficial.website);
         }
         if (thisOfficial.address != null) {
+            String csz = "";
             ArrayList<String> addresses = thisOfficial.address;
             address.setText(addresses.get(0));
             address2.setText(addresses.get(2));
             address3.setText(addresses.get(1));
-            CityStateZ.setText((addresses.get(3) + ", " + addresses.get(4) + " " + addresses.get(5)));
+            if ( !addresses.get(3).isEmpty()){
+                csz += addresses.get(3) + " ";
+            }
+            if (addresses.size() > 4){
+                csz += addresses.get(4) + " ";
+            }
+            if (addresses.size() > 5) {
+                csz += addresses.get(5) + " ";
+            }
+            CityStateZ.setText(csz);
         }
 
         ImageView partyImage;
