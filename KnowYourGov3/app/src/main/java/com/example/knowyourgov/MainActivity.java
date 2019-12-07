@@ -61,59 +61,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String zip;
     private String city;
     private String state;
-    TextView header;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
-
-        setTitle("Know Your Government");
-        locationManager = (LocationManager)  getSystemService(Context.LOCATION_SERVICE);
-
         if (!doNetCheck()){ setContentView(R.layout.noconnection);}
-
-
-        criteria = new Criteria();
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setSpeedRequired(false);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    },
-                    MY_LOCATION_REQUEST_CODE_ID);
-        }
         else {
-            setLocation();
+            setContentView(R.layout.main_activity);
+
+            setTitle("Know Your Government");
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            criteria = new Criteria();
+            criteria.setPowerRequirement(Criteria.POWER_LOW);
+            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+            criteria.setAltitudeRequired(false);
+            criteria.setBearingRequired(false);
+            criteria.setSpeedRequired(false);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                        this,
+                        new String[]{
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                        },
+                        MY_LOCATION_REQUEST_CODE_ID);
+            } else {
+                setLocation();
+                recyclerView = findViewById(R.id.recyclerView);
+                mainActivity = this;
+                OfficialAdapter = new official_adapter(Officials, this);
+                recyclerView.setAdapter(OfficialAdapter);
+                recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+                getZip(this);
+                if (zip != null) {
+                    setHeader();
+                    AsyncTask<String, Void, String> a = new getOfficialInfo(this).execute(zip);
+                }
+            }
         }
-        setLocation();
-        recyclerView = findViewById(R.id.recyclerView);
-        mainActivity = this;
-        OfficialAdapter = new official_adapter(Officials, this);
-        recyclerView.setAdapter(OfficialAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        getZip(this);
-
-        header = findViewById(R.id.header);
-        header.setText(city + ", " + state + " " + zip);
-        AsyncTask<String, Void, String> a = new getOfficialInfo(this).execute(zip);
-
-
     }
 
     public void setHeader(){
         TextView header = findViewById(R.id.header);
         header.setText(city +", " + state + " " + zip);
+    }
+
+    public void setHeader(String _city, String _state, String _zip){
+        zip     = _zip;
+        city    = _city;
+        state   = _state;
+        setHeader();
     }
 
     private boolean doNetCheck() {
@@ -175,11 +175,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     protected void onRestoreInstanceState(Bundle savedInstance){
-          super.onRestoreInstanceState(savedInstance);
-          Officials = (ArrayList)savedInstance.getSerializable("Officials");
-          OfficialAdapter = new official_adapter(Officials, this);
-          recyclerView.setAdapter(OfficialAdapter);
-          recyclerView.setLayoutManager(new LinearLayoutManager((this)));
+        super.onRestoreInstanceState(savedInstance);
+        Officials = (ArrayList)savedInstance.getSerializable("Officials");
+        OfficialAdapter = new official_adapter(Officials, this);
+        recyclerView.setAdapter(OfficialAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager((this)));
     }
 
 
@@ -280,12 +280,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setLocation() {
 
         String bestProvider = locationManager.getBestProvider(criteria, true);
-        Location currentLocation = locationManager.getLastKnownLocation(bestProvider);
+        Location currentLocation = null;
+        if (bestProvider != null){ currentLocation = locationManager.getLastKnownLocation(bestProvider);}
         if (currentLocation != null) {
-             lat = currentLocation.getLatitude();
-             longitude = currentLocation.getLongitude();
-             Toast.makeText(this, String.valueOf(lat), Toast.LENGTH_SHORT).show();
-             getZip(this);
+            lat = currentLocation.getLatitude();
+            longitude = currentLocation.getLongitude();
+            getZip(this);
         }
     }
 
@@ -299,7 +299,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (!addresses.isEmpty()) {
                 zip = addresses.get(0).getPostalCode();
-                Toast.makeText(this, zip, Toast.LENGTH_SHORT).show();
                 city = addresses.get(0).getLocality();
                 state = addresses.get(0).getAdminArea();
             }
@@ -310,14 +309,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void setHeader(String _city, String _state, String _zip){
-        zip     = _zip;
-        city    = _city;
-        state   = _state;
-        setHeader();
-    }
-
 }
-
-
-

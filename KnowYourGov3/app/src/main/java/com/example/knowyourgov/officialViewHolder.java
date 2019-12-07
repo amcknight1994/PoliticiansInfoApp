@@ -3,7 +3,6 @@ package com.example.knowyourgov;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class officialViewHolder extends RecyclerView.ViewHolder {

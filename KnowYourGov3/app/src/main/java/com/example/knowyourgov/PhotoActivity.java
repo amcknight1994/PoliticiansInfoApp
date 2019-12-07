@@ -30,13 +30,12 @@ public class PhotoActivity extends AppCompatActivity {
 
         TextView officeName = findViewById(R.id.officetitle);
         TextView name       = findViewById(R.id.name);
-        TextView party      = findViewById(R.id.party);
+
 
         thisOfficial = ( Official) intent.getSerializableExtra("Official");
 
         officeName.setText(thisOfficial.title);
         name.setText(thisOfficial.name);
-       // party.setText(thisOfficial.party);
 
         loadRemoteImage(thisOfficial.photoURL);
 

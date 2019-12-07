@@ -23,10 +23,8 @@ public class official_adapter extends RecyclerView.Adapter<officialViewHolder>{
         @NonNull
         @Override
         public officialViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.official_holder, parent,false);
             itemView.setOnClickListener(mainActivity);
-
             return new officialViewHolder(itemView);
         }
 
@@ -34,7 +32,6 @@ public class official_adapter extends RecyclerView.Adapter<officialViewHolder>{
         public void onBindViewHolder(@NonNull officialViewHolder holder, int position) {
             Official selectedOfficial= OfficialList.get(position);
             holder.Name.setText(selectedOfficial.title);
-            //holder.Party.setText(selectedOfficial.party);
             holder.Title.setText(selectedOfficial.name + " (" + selectedOfficial.party +")");
 
         }

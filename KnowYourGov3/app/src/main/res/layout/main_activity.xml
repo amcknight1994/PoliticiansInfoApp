@@ -24,7 +24,7 @@
         android:layout_height="0dp"
         android:background="@color/purple"
         android:paddingTop="5sp"
-        android:text="Chicago, IL, 60654"
+        android:text="Could Not Find Current Location"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/recyclerView"

@@ -7,7 +7,7 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class splash extends AppCompatActivity {
-    private static final int SPLASH_TIME_OUT = 2500;
+    private static final int SPLASH_TIME_OUT = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +19,6 @@ public class splash extends AppCompatActivity {
             @Override
             public void run() {
 
-                // This run method will be executed once the timer is over
-                // Start your app main activity
                 Intent i = new Intent(splash.this, MainActivity.class);
                 startActivity(i);
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);

@@ -13,7 +13,6 @@
         android:layout_height="26dp"
         android:background="@color/purple"
         android:paddingTop="5sp"
-        android:text="Chicago, IL, 60654"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"

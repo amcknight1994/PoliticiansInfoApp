@@ -1,16 +1,12 @@
 package com.example.knowyourgov;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Official implements Serializable {
     String title;
     String party;
     String name;
-    Office office;
     String phones;
     String website;
     ArrayList<String> address;
