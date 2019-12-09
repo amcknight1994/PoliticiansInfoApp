@@ -42,6 +42,7 @@ public class OfficialActivity extends AppCompatActivity {
         TextView currentlocation = findViewById(R.id.location);
         currentlocation.setText(location.get(0) + ", " + location.get(1) + " " + location.get(2));
 
+        //set Officials info based on data stored in thisOfficial
         officeName.setText(thisOfficial.title);
         name.setText(thisOfficial.name);
         party.setText(thisOfficial.party);
@@ -113,8 +114,7 @@ public class OfficialActivity extends AppCompatActivity {
             gplus.setImageResource(R.drawable.googleplus);
         }
     }
-
-
+    //called when the party logo is pressed, sends user to party web page
     public void openLink (View v)  {
         ImageView x = (ImageView) v;
 
@@ -128,8 +128,8 @@ public class OfficialActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
 
-    };
-
+    }
+    //load headshot of official, or broken image photo if the API doesn't have an image for this person
     private void loadRemoteImage(final String imageURL) {
         imageView = findViewById(R.id.officialImage);
         Picasso picasso = new Picasso.Builder(this).build();
@@ -138,7 +138,7 @@ public class OfficialActivity extends AppCompatActivity {
                 .placeholder(R.drawable.placeholder)
                 .into(imageView);
     }
-
+    //next methods open when social media icons are selected
     public void openFB(View v) {
         Uri uri = Uri.parse("http://www.facebook.com/" + thisOfficial.facebook);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);

@@ -33,7 +33,6 @@ public class official_adapter extends RecyclerView.Adapter<officialViewHolder>{
             Official selectedOfficial= OfficialList.get(position);
             holder.Name.setText(selectedOfficial.title);
             holder.Title.setText(selectedOfficial.name + " (" + selectedOfficial.party +")");
-
         }
 
         @Override

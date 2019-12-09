@@ -87,7 +87,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Manifest.permission.ACCESS_FINE_LOCATION
                         },
                         MY_LOCATION_REQUEST_CODE_ID);
-            } else {
+            }
+            else {
                 setLocation();
                 recyclerView = findViewById(R.id.recyclerView);
                 mainActivity = this;
@@ -133,11 +134,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     protected void onPause(){
         super.onPause();
         doWrite(recyclerView);
-
     }
 
     public void doWrite(View v) {
@@ -181,8 +180,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.setAdapter(OfficialAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager((this)));
     }
-
-
 
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.main_menu, menu);
@@ -235,7 +232,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     public void onClick(View view) {
         int index = recyclerView.getChildLayoutPosition(view);
         Official passedOfficial = Officials.get(index);
@@ -252,12 +248,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
     public void updateData(ArrayList<Official> OfficialList) {
         Officials.addAll(OfficialList);
         OfficialAdapter.notifyDataSetChanged();
     }
-
 
     public void onRequestPermissionsResult(
             int requestCode, @NonNull
@@ -289,7 +283,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
     public void getZip(MainActivity v) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
         try {
@@ -308,5 +301,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             e.printStackTrace();
         }
     }
-
 }

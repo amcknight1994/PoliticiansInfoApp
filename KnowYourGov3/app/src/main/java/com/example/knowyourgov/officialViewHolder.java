@@ -9,13 +9,9 @@ public class officialViewHolder extends RecyclerView.ViewHolder {
     TextView Name;
     TextView Title;
 
-
-
     public officialViewHolder(View view){
         super(view);
         Name =      view.findViewById(R.id.Name);
         Title =     view.findViewById(R.id.officeTitle);
-
-
     }
 }

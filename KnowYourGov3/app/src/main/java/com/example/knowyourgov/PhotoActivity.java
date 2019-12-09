@@ -63,7 +63,6 @@ public class PhotoActivity extends AppCompatActivity {
         }
     }
 
-
     public void openLink (View v)  {
         Uri uri = Uri.parse("http://www.google.com");
         if (thisOfficial.party.contains("Democratic")){
@@ -76,9 +75,6 @@ public class PhotoActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-
-
-
 
     private void loadRemoteImage(final String imageURL) {
 
