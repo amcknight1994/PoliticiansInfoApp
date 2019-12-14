@@ -11,12 +11,12 @@ import java.util.ArrayList;
 
 public class official_adapter extends RecyclerView.Adapter<officialViewHolder>{
 
-        private ArrayList<Official> OfficialList;
+        private ArrayList<Official> electionList;
         private MainActivity mainActivity;
 
         official_adapter(ArrayList<Official> list, MainActivity mainActivity){
 
-            OfficialList = list;
+            electionList = list;
             this.mainActivity = mainActivity;
         }
 
@@ -30,14 +30,14 @@ public class official_adapter extends RecyclerView.Adapter<officialViewHolder>{
 
         @Override
         public void onBindViewHolder(@NonNull officialViewHolder holder, int position) {
-            Official selectedOfficial= OfficialList.get(position);
+            Official selectedOfficial= electionList.get(position);
             holder.Name.setText(selectedOfficial.title);
             holder.Title.setText(selectedOfficial.name + " (" + selectedOfficial.party +")");
         }
 
         @Override
         public int getItemCount() {
-            return OfficialList.size();
+            return electionList.size();
         }
 
 }

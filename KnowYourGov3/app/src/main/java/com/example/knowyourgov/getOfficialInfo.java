@@ -32,9 +32,9 @@ public class getOfficialInfo extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
 
-        ArrayList<Official> OfficialList = parseJSON(s);
-        if (OfficialList != null)
-            mainActivity.updateData(OfficialList);
+        ArrayList<Official> electionList = parseJSON(s);
+        if (electionList != null)
+            mainActivity.updateData(electionList);
         if (normalized != null) {
             try {
                 mainActivity.setHeader(normalized.getString("city"),normalized.getString("state"), normalized.getString("zip"));
@@ -80,7 +80,7 @@ public class getOfficialInfo extends AsyncTask<String, Void, String> {
 
     private ArrayList<Official> parseJSON(String s) {
 
-        ArrayList<Official> OfficialList = new ArrayList();
+        ArrayList<Official> electionList = new ArrayList();
         JSONArray indices;
 
         try {
@@ -145,11 +145,11 @@ public class getOfficialInfo extends AsyncTask<String, Void, String> {
                            }
                        }
                    }
-                    OfficialList.add(toAdd);
+                    electionList.add(toAdd);
                 }
               }
 
-            return OfficialList;
+            return electionList;
             } catch (Exception e) {
 
             Log.d(TAG, "parseJSONX: " + e.getMessage());

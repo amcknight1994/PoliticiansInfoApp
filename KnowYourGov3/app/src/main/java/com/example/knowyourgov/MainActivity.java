@@ -136,40 +136,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     protected void onPause(){
         super.onPause();
-        doWrite(recyclerView);
-    }
-
-    public void doWrite(View v) {
-
-        JSONArray jsonArray = new JSONArray();
-        for (Official n : Officials) {
-            try {
-                JSONObject OfficialJSON = new JSONObject();
-                OfficialJSON.put("name", n.name);
-                OfficialJSON.put("party", n.party);
-                OfficialJSON.put("title", n.title);
-
-                jsonArray.put(OfficialJSON);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        String jsonText = jsonArray.toString();
-
-        Log.d(TAG, "doWrite: " + jsonText);
-
-        try {
-            OutputStreamWriter outputStreamWriter =
-                    new OutputStreamWriter(
-                            openFileOutput("Officials.txt", Context.MODE_PRIVATE)
-                    );
-
-            outputStreamWriter.write(jsonText);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.d(TAG, "doWrite: File write failed: " + e.toString());
-        }
     }
 
 
@@ -248,8 +214,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void updateData(ArrayList<Official> OfficialList) {
-        Officials.addAll(OfficialList);
+    public void updateData(ArrayList<Official> electionList) {
+        Officials.addAll(electionList);
         OfficialAdapter.notifyDataSetChanged();
     }
 
